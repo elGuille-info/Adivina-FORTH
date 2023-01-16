@@ -11,46 +11,15 @@ adivina-versiones\adivina-v1.195.forth
 marker adivina.forth
 
 \ Adivinar un número
-: VERSION-ADIVINA   ." *** Adivina Forth v1.270 (16-ene-2023 20.52) *** " ;
+: VERSION-ADIVINA   ." *** Adivina Forth v1.271 (16-ene-2023 21.50) *** " ;
+
+\ v1.271 (16-ene-2023 21.50)
+\   Quito comentarios de cambio de nombres de las palabras y variables, etc.
+\   Quito definiciones y código que no se usan.
+\   Para ver lo que he quitado, comparar con la versión anterior ;-)
 
 \ v1.270 (16-ene-2023 20.52)
 \   En jugar-facil, jugar-dificil y jugar-auto le pongo el tipo de juego a quejugar.
-
-\ v1.269 (16-ene-2023 19.34)
-\   Comento los mensajes de debug.
-
-\ v1.268 (16-ene-2023 17.34)
-\   En nivel y dificultad si no se escribe nada delante 
-\       no mostrar que no el número indicado no es válido.
-\   Al indicar jugar <opcion> confirmar si se quiere cambiar la opción de juego.
-
-\ v1.267 (16-ene-2023 16.59)
-\   Añado a $comandos todas las opciones de $jugar
-\       En $comandos-text poner cadenas vacías para no mostrar el comando y la descripción.
-\   Ya se puede escribir 'jugar opcion' en dime / jugar en bucle.
-\   En comandos-mostrar no mostrar el comando si la descripción en una cadena vacía.
-
-\ v1.266 (16-ene-2023 16.41)
-\   Al final de pregunta? se había quedado una comparación que no se usa ahí.
-\   Hacer una copia de la pila cuando sea un comando después de ayuda-see
-
-\ v1.265 (16-ene-2023 16.03)
-\   Cambio los nombres de las constantes de dificultades para que no tengan el guión bajo.
-
-\ v1.264 (16-ene-2023 13.29)
-\   En reiniciar ya no se asigna una cadena vacía a quejugar, se asigna al cargar el fichero.
-\   En jugar-solo mostrar qué tipo de juego es.
-\   Cuando se llame a las opciones de jugar solo poner en quejugar el valor del tipo de juego
-\       para mostarlo desde jugar-solo.
-
-\ v1.263 (16-ene-2023 12.38)
-\   Muevo %comandos, etc a la parte de variables
-\   Muevo %ayudas, $ayudas, ayuda>s y ayuda-index a la parte de variables.
-\   Muevo %dificultades, etc a la parte de variables.
-\   Muevo la definición de comprobarsee a la parte de las variables.
-\   En reiniciar asignar una cadena vacía a quejugar.
-\   Muevo las variables de quejugar, etc antes de las palabras.
-\   Quito debugs en ayuda-see.
 
 
 \ NOTAS:
@@ -276,32 +245,8 @@ VARIABLE NEXT-STRING          0 NEXT-STRING !
 ;
 : str?u?   ( addr len -- flag ) str?ud? ;
 
-\ Comprobar si es un número, devolverá true o false
-\   El número a convertir puede tener letras después del número
-\       en ese caso devuelve true
-\ : STR>NUM?  ( addr len -- flag )
-\     0. 2swap dup >r >number nip r> <
-\     2SWAP 2DROP
-\ ;
-
 \ v1.128 cambio NO-NUM por NO_NUM, 06-ene-2023 01.28
 #-1234567890 CONSTANT NO_NUM
-
-\ Convierte un string en un número simple, 
-\   deja el número o NO_NUM si no lo ha convertido
-\ Funciona con s" 123" STR>INT . -- 123
-\ También funciona con una variable definida con VARIABLE <NOMBRE> <TAMAÑO> ALLOT
-\   Usando <NOMBRE> <TAMAÑO> -TRAILING STR>INT
-\ : STR>INT  ( addr len -- n )
-\     0. 2swap dup >r >number nip r> <
-\     
-\     \ Si no lo convierte, la pila tendrá 0 0 0
-\     \ Si lo convierte, la pila tendrá num 0 -1
-\     \   Es decir, el último valor es el flag de si lo ha convertido
-\     
-\     \ Si no lo ha convertido, devolver NO_NUM o el número sencillo
-\     0= IF 2DROP NO_NUM ELSE DROP THEN
-\ ;
 
 \ Definiciones para saber si es un dígito, una letra o una cadena tiene letras, 05-ene-2023 17.42
 
@@ -409,99 +354,66 @@ VARIABLE ESDEBUG? TRUE ESDEBUG? !
 
 \ El número de orden actual de los números indicados, 
 \   el máximo será INTENTOSMAXIMO ya que se juega con nivel de dificultad
-\ v1.94 cambio I.N por INTENTOS
 VARIABLE INTENTOS
 
 \ v1.52 para saber quién está jugando
-\ v1.54 cambio HUMANO por _HUMANO y MAQUINA por _MAQUINA
 10 CONSTANT _HUMANO
 11 CONSTANT _MAQUINA
-\ v1.54 antes QUIEN-JUEGA
 \ v1.81 asigno _HUMANO a QUIENJUEGA
-\ v1.94 cambio QUIEN.JUEGA por QUIENJUEGA
 VARIABLE QUIENJUEGA _HUMANO QUIENJUEGA !
 
 \ v1.50 para saber que se ha mostrdo la solución al pasar los intentos
-\ v1.54 cambio SOLUCION-MOSTRADA por SOLUCION.MOSTRADA
-\ v1.94 cambio SOLUCION.MOSTRADA por SOLUCIONMOSTRADA
 VARIABLE SOLUCIONMOSTRADA FALSE SOLUCIONMOSTRADA !
 
 \ Los números según el nivel de juego:
 \ n adivinar un número del 1 al n*100
-\ Los niveles son del 1 al 9.
 \ v1.42 defino el nivel máximo como variable
 \ Le asigno el valor 12 a ver qué pasa
-\ v1.94 cambio NIVEL.MAX por NIVELMAXIMO
 VARIABLE NIVELMAXIMO 12 NIVELMAXIMO !
 
 \ v1.5 el valor predeterminado del nivel es 1
-\ v1.54 cambio EL-NIVEL por EL.NIVEL
-\ v1.94 cambio EL.NIVEL por ELNIVEL
 VARIABLE ELNIVEL 1 ELNIVEL !
 
 \ El número a adivinar 
-\ v1.54 cambio NUM por EL.NUM
-\ v1.94 cambio EL.NUM por NUMEROADIVINAR
 VARIABLE NUMEROADIVINAR
 \ El último número indicado 
-\ v1.94 cambio N.LAST por ULTIMONUMERO
 VARIABLE ULTIMONUMERO 
 
 \ El número máximo de adivinazas ( 51 = de 0 a 50 )
 \ Aunque se usará siempre INTENTOSMAXIMO, esto solo define el máximo para el array ARRAY.NUMS.
-\ v1.54 cambio MAX.NUMS por MAX_NUMS ya que es una constante
 51 CONSTANT MAX_NUMS
 
 \ El número máximo de intentos, será según el nivel de dificultad
-\ v1.94 cambio MAX.INTENTOS por INTENTOSMAXIMO
 VARIABLE INTENTOSMAXIMO MAX_NUMS INTENTOSMAXIMO !
 
 \ El nivel de DIFICULTAD
-\ v1.94 cambio NIVEL.D por NIVELDIFICULTAD
 VARIABLE NIVELDIFICULTAD -1 NIVELDIFICULTAD !
 
 \ Array para los números indicados de 0 a MAX_NUMS
-\ v1.54 cambio NUMS por ARRAY.NUMS
 MAX_NUMS ARRAY ARRAY.NUMS
 
 \ v1.15 para los valores más cercanos
 \ El menor más cercano
-\ v1.94 cambio N.MENOR por MENORINDICADO
 VARIABLE MENORINDICADO
 \ El mayor más cercano
-\ v1.94 cambio N.MAYOR por MAYORINDICADO
 VARIABLE MAYORINDICADO
 
 \ v1.46 estaba definida en la línea 346 y se usa antes en la 281
 \ v1.23 Usar una variable para el número indicado
 \   Con idea de no tener que duplicar el número indicado y usar ese valor en las comprobaciones.
-\ v1.94 cambio N.GUESS por NUMEROINDICADO
 VARIABLE NUMEROINDICADO
 
 \ v1.208, variable para cuando se llama desde JUGAR
 VARIABLE DESDEJUGAR
 
 \ Variable para la palabra escrita
-\ Máximo 20 caracteres
-\ v1.111 lo cambio a 40 caracteres
 40 CONSTANT MAX_AYUDA
 \ v1.237 vuelvo a definirlas con VARIABLE para ver si va en SwiftForth
 VARIABLE QUEAYUDA MAX_AYUDA ALLOT
-\ Así también funciona, estando QUENUMEROS y QUELETRAS con: CREATE ... MAX_AYUDA CHARS ALLOT
-\ CREATE QUEAYUDA MAX_AYUDA CELLS ALLOT
-\ CREATE QUEAYUDA MAX_AYUDA CHARS ALLOT
-\ MAX_AYUDA STRING2 QUEAYUDA
 
 \ Crear las variables para el número y las letras, 05-ene-2023 23.00
 VARIABLE QUENUMEROS MAX_AYUDA ALLOT
 VARIABLE QUELETRAS MAX_AYUDA ALLOT
-\ Para probar con otras definiciones
-\ CREATE QUENUMEROS MAX_AYUDA CELLS ALLOT
-\ CREATE QUELETRAS MAX_AYUDA CELLS ALLOT
-\ CREATE QUENUMEROS MAX_AYUDA CHARS ALLOT
-\ CREATE QUELETRAS MAX_AYUDA CHARS ALLOT
-\ MAX_AYUDA STRING2 QUENUMEROS
-\ MAX_AYUDA STRING2 QUELETRAS
 
 \ Devuelve la dirección y longitud del contenido de QUEAYUDA
 : 'QUEAYUDA   ( -- addr len ) QUEAYUDA MAX_AYUDA -TRAILING ;
@@ -516,7 +428,6 @@ VARIABLE QUELETRAS MAX_AYUDA ALLOT
 \   El texto se indicará con s" ..." o dejando una dirección y longitud en la pila
 \ v1.223 no asignar más de los caracteres que puede contener
 : QUEAYUDA!   ( addr len -- ) QUEAYUDA-LIMPIAR MAX_AYUDA MIN QUEAYUDA SWAP MOVE ;
-\ : QUEAYUDA!   ( addr len -- ) QUEAYUDA-LIMPIAR QUEAYUDA SWAP MOVE ;
 
 \ Muestra en la consola el contenido de QUEAYUDA
 : QUEAYUDA.   ( -- ) 'QUEAYUDA TYPE ;
@@ -541,9 +452,8 @@ VARIABLE QUELETRAS MAX_AYUDA ALLOT
 : QUEAYUDA>MAYUSCULAS   ( -- ) 'QUEAYUDA BOUNDS ?DO I c@ toupper I c! LOOP ;
 
 \ v1.217 comprobar si QUEAYUDA tiene el carácter indicado
-: QUEAYUDA?C   ( char -- flag )
-    'QUEAYUDA S?CHAR
-;
+: QUEAYUDA?C   ( char -- flag ) 'QUEAYUDA S?CHAR ;
+
 \ Comprobar si QUEAYUDA empieza por un número, 06-ene-2023 00.05
 : QUEAYUDA?1N   ( -- flag ) QUEAYUDA C@ DIGITO? ;
 
@@ -562,10 +472,8 @@ VARIABLE QUELETRAS MAX_AYUDA ALLOT
 
 \ v1.223 no asignar más de los caracteres que puede contener
 \ Asignar la cadena indicada a QUENUMEROS
-\ : QUENUMEROS!   ( addr len -- ) QUENUMEROS-LIMPIAR QUENUMEROS SWAP MOVE ;
 : QUENUMEROS!   ( addr len -- ) QUENUMEROS-LIMPIAR MAX_AYUDA MIN QUENUMEROS SWAP MOVE ;
 \ Asignar la cadena indicada a QUELETRAS
-\ : QUELETRAS!   ( addr len -- ) QUELETRAS-LIMPIAR QUELETRAS SWAP MOVE ;
 : QUELETRAS!   ( addr len -- ) QUELETRAS-LIMPIAR MAX_AYUDA MIN QUELETRAS SWAP MOVE ;
 
 \ Convertir QUENUMEROS en un número, 06-ene-2023 00.29
@@ -583,7 +491,6 @@ VARIABLE QUELETRAS MAX_AYUDA ALLOT
         \ si el top de la pila es false, es que tenía letras,
         \   en ese caso, dejar NO_NUM en la pila
         NOT IF DROP NO_NUM THEN
-        \ s" en quenumeros>n, QUENUMEROS= " 'QUENUMEROS DEBUG2
     THEN
 ;
 
@@ -596,9 +503,9 @@ VARIABLE QUELETRAS MAX_AYUDA ALLOT
 \ v1.227 variable temporal para manipular las ayudas
 \ v1.237 La defino con VARIABLE para ver si va en SwiftForth
 VARIABLE QUEAYUDATMP MAX_AYUDA ALLOT
-\ MAX_AYUDA STRING2 QUEAYUDATMP
 
 : 'QUEAYUDATMP   ( -- addr len ) QUEAYUDATMP MAX_AYUDA -TRAILING ;
+
 : QUEAYUDATMP!   ( addr len -- ) 
     QUEAYUDATMP MAX_AYUDA MAX_AYUDA ?LIMPIAR MAX_AYUDA MIN QUEAYUDATMP SWAP MOVE
 ;
@@ -608,8 +515,7 @@ VARIABLE QUEAYUDATMP MAX_AYUDA ALLOT
 \   esto no va con la misma variable, usar una temporal
 : QUELETRAS-SPLIT   ( -- )
     \ estaban al revés las asignaciones
-    \ pero no se puede asignar a la misma dirección !!!???
-    \ 'QUELETRAS 32 $SPLIT QUELETRAS! QUENUMEROS!
+    \ pero no se puede asignar a la misma dirección!!!
     'QUELETRAS 32 $SPLIT QUEAYUDATMP! QUENUMEROS!
     'QUEAYUDATMP QUELETRAS!
 ;
@@ -637,16 +543,14 @@ VARIABLE QUEAYUDAPOS
 \   si no, se asigna a QUELETRAS
 : QUEAYUDA-SPLIT
     \ Limpiar el contenido de los números y las letras, 06-ene-2023 01.58
-    QUENUMEROS-LIMPIAR
-    QUELETRAS-LIMPIAR
+    QUENUMEROS-LETRAS-LIMPIAR
+    \ QUENUMEROS-LIMPIAR
+    \ QUELETRAS-LIMPIAR
     QUEAYUDA?1N
     IF QUEAYUDA-SPLIT-NUMEROS-LETRAS
     ELSE QUEAYUDA-SPLIT-LETRAS-NUMEROS
     THEN
 ;
-
-\ Asignar el texto escrito en la consola a QUEAYUDA con MAX_AYUDA máximo de caracteres
-\ : DI-QUEAYUDA   1 TEXT PAD QUEAYUDA MAX_AYUDA MOVE ;
 
 \ v1.230 para el texto que se escriba con jugar
 VARIABLE QUEJUGAR MAX_AYUDA ALLOT
@@ -663,7 +567,7 @@ VARIABLE QUEJUGAR MAX_AYUDA ALLOT
 \ Limpiar el contenido de QUEAYUDA con espacios
 : QUEJUGAR-LIMPIAR   ( -- ) 'QUEJUGAR BLANK ;
 
-\ Asignar el contenido de una dirección de memoria a QUEAYUDA
+\ Asignar el contenido de una dirección de memoria a QUEJUGAR
 \   El texto se indicará con s" ..." o dejando una dirección y longitud en la pila
 \ No asignar más de los caracteres que puede contener
 : QUEJUGAR!   ( addr len -- ) QUEJUGAR-LIMPIAR MAX_AYUDA MIN QUEJUGAR SWAP MOVE ;
@@ -715,17 +619,14 @@ CREATE $JUGARINFO
 ;
 
 \ Para ver si se debe comprobar la palabra para mostrar la ayuda correspondiente
-\ y si no se encuentra esa palabra salir sin más.
+\ y si no se encuentra esa palabra salir sin más
 VARIABLE COMPROBARSEE FALSE COMPROBARSEE !
-
 
 \ El valor máximo para las dificultades
 \ En el array se buscará siempre desde 1 o SENCILLO
 6 CONSTANT %DIFICULTADES
 
 \ Constantes para el nivel de DIFICULTAD
-\ v1.105 el mínimo es 1 y el máximo 5, antes de 0 a 4
-\ SENCILLO 22, MEDIO 14, DIFICIL 9, EXPERTO 6, MAESTRO 5
 \ SENCILLO 22, MEDIO 14, DIFICIL 12, EXPERTO 9, MAESTRO 6, SENSEI 5
 1 CONSTANT SENCILLO
 2 CONSTANT MEDIO
@@ -813,7 +714,6 @@ CREATE $AYUDAS
 \ Busca en la colección $AYUDAS si está la palabra dejada en la pila
 \ Debe estar en mayúsculas, será al estilo de QUEAYUDA MAX_AYUDA -TRAILING
 : AYUDA-INDEX   ( addr len -- index|-1 )
-    \ s"     al entrar en ayuda-index " DEBUG1
     \ Poner -1 y dejarlo antes de addr len: -1 addr len
     -1 -ROT
     %AYUDAS 1+ 0
@@ -830,7 +730,6 @@ CREATE $AYUDAS
     \ En la pila estará el valor del índice si se ha hallado, 
     \ si no, lo que hubiera en la pila y la dirección puesta al entrar
     2DROP
-    \ s"     al salir de ayuda-index " DEBUG1
 ;
 
 17 CONSTANT %COMANDOS
@@ -874,11 +773,6 @@ CREATE $COMANDOS-TEXT
     \ Que solo acepte valores entre %COMANDOS y 0  03-ene-2023 13.25
     %COMANDOS MIN 0 MAX 
     \ Deja en la pila la dirección de $COMANDOS del índice que está en la pila
-    
-    \ Si se define con s"
-    \ $COMANDOS SWAP 2 CELLS * + 2@ 
-    
-    \ Si se define con $"
     $COMANDOS SWAP CELLS + @ COUNT
 ;
 
@@ -889,9 +783,6 @@ CREATE $COMANDOS-TEXT
 \ Deja en la pila la dirección de memoria del texto del índice indicado
 : COMANDO-TEXT>S   ( index -- addr len )
     %COMANDOS MIN 0 MAX 
-    \ Si se define con s"
-    \ $COMANDOS-TEXT SWAP 2 CELLS * + 2@
-    \ Si se define con $"
     $COMANDOS-TEXT SWAP CELLS + @ COUNT
 ;
 
@@ -899,7 +790,6 @@ CREATE $COMANDOS-TEXT
 : COMANDO-TEXT-LEN   ( index -- len )
     COMANDO-TEXT>S SWAP DROP
 ;
-
 
 \ Busca en la colección $COMANDOS si está la palabra dejada en la pila
 \ Debe estar en mayúsculas, será al estilo de QUEAYUDA MAX_AYUDA -TRAILING
@@ -953,9 +843,6 @@ CREATE $COMANDOS-TEXT
     1 TEXT PAD QUEAYUDA MAX_AYUDA MOVE
     \ Convertir en mayúsculas
     QUEAYUDA>MAYUSCULAS
-    \ v1.266 esto no debía estar aquí
-    \ Si es la letra indicada en mayúsculas, pondrá TRUE en la pila, si no pondrá FALSE
-    \ QUEAYUDA C@ = 
 ;
 \ Preguntar el texto indicado en addr2 len2
 \ La cadena para usar antes de la pregunta estará en addr len
@@ -1008,15 +895,12 @@ CREATE $COMANDOS-TEXT
 
 \ v1.8 mostrar el nivel y el número a adivinar.
 \ v1.10 usar EL-MAXIMO para el número máximo a adivinar
-\ cambio el nombre de NIVEL-SHOW a NIVEL-MOSTRAR
 : NIVEL-MOSTRAR
     ." El NIVEL actual es " ELNIVEL ? 
     ." y el numero a adivinar es mayor que " MENORINDICADO ? 
     ." y menor que " MAYORINDICADO @ STR ." ."
 ;
     
-
-\ cambio SHOW-DIFICULTADES por DIFICULTADES-MOSTRAR
 : DIFICULTADES-MOSTRAR
     CR
     ." Escribe n DIFICULTAD (o n D!) para cambiar el nivel de dificultad." CR
@@ -1026,7 +910,6 @@ CREATE $COMANDOS-TEXT
     \ mostrar el nivel actual de DIFICULTAD del juego
     DIFICULTAD-MOSTRAR ;
 
-\ cambio SHOW-INSTRUCCIONES por INSTRUCCIONES-MOSTRAR
 : INSTRUCCIONES-MOSTRAR
     \ v1.59 pongo un cambio de línea para que se separa el resultado de las instrucciones
     CR
@@ -1060,7 +943,6 @@ CREATE $COMANDOS-TEXT
 ;
 
 \ Mostrar las opciones de juego automático
-\ v1.60 cambio el nombre de OPCIONES-AUTO a OPCIONES-SOLO
 : OPCIONES-SOLO
     CR 
     ." Opciones de juego automatico y los niveles de dificultad: " CR
@@ -1083,14 +965,14 @@ CREATE $COMANDOS-TEXT
 ;
 
 \ Mostrar los niveles de juego de NIVEL y DIFICULTAD
-: VER-NIVELES
+: VER-NIVELES   ( -- )
     CR
     NIVEL-MOSTRAR CR
     DIFICULTAD-MOSTRAR
 ;
 
 \ v1.108 Breve explicación de qué es FORTH
-: AYUDA-FORTH
+: AYUDA-FORTH   ( n| -- )
     DEPTH 0= IF CR ." *** La ayuda de FORTH ***" CR CR ELSE DROP THEN
     ." Forth o FORTH es un lenguaje de programacion y un ambiente de programacion " CR
     ."   para ordenadores inventado por Charles H. Moore en 1968 y usado en 1970 " CR
@@ -1151,9 +1033,6 @@ CREATE $COMANDOS-TEXT
     ."    Sera como si hubieras escrito ese numero seguido de ADIVINA." CR
     ."    A-N? es lo que usa el ordenador cuando juega solo (en modo automatico)." CR
     ." Escribe NUMS? para ver los numeros que has indicado y si son menor o mayor que el que hay que adivinar." CR
-    \ para no mostrar el ok
-    \ no usarlo porque si esto se llama desde un bloque con IFs, ya no se sigue analizando el resto
-    \ QUIT
 ;
 
 : AYUDA-INTERACTIVO   ( flag| -- )
@@ -1166,7 +1045,6 @@ CREATE $COMANDOS-TEXT
     ."    o si el numero indicado es menor o mayor que el numero a adivinar." CR
     ."    Si indicas un numero menor o mayor de los ya indicados no se cuenta como intento." CR
     ." Para ver la solucion escribe RESUELVE, RES o ME-RINDO." CR   
-    \ FALSE AYUDA-PISTA CR
     CR
     ." Si quieres que yo adivine el numero escribe OPCIONES-SOLO y veras las opciones de juego automatico." CR
     ." Si quieres jugar contra el ordenador en modo normal, escribe JUGAR." CR
@@ -1217,8 +1095,6 @@ CREATE $COMANDOS-TEXT
 : AYUDA-JUGAR   ( flag| -- )
     DEPTH 0= IF TRUE THEN
     IF CR ." *** La ayuda de JUGAR ***" CR THEN
-    \ CR
-    \ ." Para jugar una partida contra el ordenador escribe JUGAR." \ CR
     JUGAR-OPCIONES CR
     ." Si eliges jugar contra el ordenador:"
     FALSE AYUDA-JUGANDO
@@ -1228,7 +1104,7 @@ CREATE $COMANDOS-TEXT
     CR ." *** AYUDA (mientras juegas) ***" CR
     ." Intenta adivinar el numero que he elegido." CR
     VER-NIVELES CR
-    AYUDA-OPCIONES \ CR
+    AYUDA-OPCIONES
     FALSE AYUDA-JUGANDO
 ;
 
@@ -1282,17 +1158,14 @@ CREATE $COMANDOS-TEXT
 \ Si se indica 0 asignar un valor aleatorio.
 \ Si se indica un valor asignar ese nivel.
 : DIFICULTAD   ( n|-1| -- )
-    \ DEPTH 0= IF -1 THEN
     DEPTH 0= IF NO_NUM THEN
     DUP
     0 >= 
     IF
         DIFICULTAD!
     ELSE
-        \ DROP CR ."     El numero indicado para la DIFICULTAD no es valido."
         NO_NUM <>
         IF CR ."     El numero indicado para la DIFICULTAD no es valido." THEN
-        \ s" en dificultad si es menor de cero " DEBUG1
     THEN 
     \ Mostrar siempre los niveles
     VER-NIVELES
@@ -1339,14 +1212,12 @@ CREATE $COMANDOS-TEXT
 : NUMS?   MOSTRAR-NUMS ;
 
 \ Incrementar el número de intentos sin más comprobaciones
-\ v1.81 cambio INC.I.N por INC-INTENTOS
 : INC-INTENTOS   INTENTOS @ 1 + INTENTOS ! ;
 
 \ v1.19 El rango del número a adivinar
 \ v1.29 Ahora los valores de MENORINDICADO y MAYORINDICADO son el menor y el mayor indicado.
 \   Si está entre 48 y 50 solo hay una posibilidad, el 49
 \   Si está entre 47 y 50 hay 2 posibilidades: 48 y 49
-\   Cambio N.POSIBLES por N-POSIBLES
 : N-POSIBLES   MAYORINDICADO @ 1 - MENORINDICADO @ - ;
 
 \ Asignar a MENORINDICADO o MAYORINDICADO el que corresponda
@@ -1399,7 +1270,6 @@ CREATE $COMANDOS-TEXT
 
 \ v1.23 comprobar si el número indicado es aceptable.
 \   Devuelve FALSE si no se acepta el número
-\ v1.100 cambio GUESS? por NUMEROCORRECTO?
 : NUMEROCORRECTO?
     \ v1.23 Si el número es menor que 1, avisar y no tenerlo en cuenta.
     NUMEROINDICADO @ 0 <=
@@ -1476,20 +1346,14 @@ CREATE $COMANDOS-TEXT
 
 \ v1.54 A-N como ADIVINA
 : A-N   ADIVINA ;
-\ v1.55 defino N-A por si lo escribo al revés
-\ v1.94 quito la definición de N-A
-\ : N-A   ADIVINA ;
 \ v1.91 defino ?? como alias de ADIVINA
 : ??   ADIVINA ;
-
-\ v1.57 cambio el sitio de estas palabras porque A-N? usa ADIVINA
 
 \ v1.24 Poner en la pila el siguiente número a comprobar.
 \   Media = (Mayor - Menor) / 2
 \   Siguiente = Menor + Media
 \   El valor devuelto es el número sin decimales: 14.5 -> 14
 \ En gForth está definido NEXT, pero no en SwiftForth
-\ v1.56 cambio el nombre de N.NEXT a N-NEXT
 : N-NEXT   ( -- n )
     \ v1.29 comprobar si es cero
     MAYORINDICADO @ MENORINDICADO @ - 0= 
@@ -1503,7 +1367,6 @@ CREATE $COMANDOS-TEXT
 
 \ Devuelve TRUE si el número es el correcto o se han pasado los intentos
 \   Se usa cuando juega automáticamente/solo
-\ v1.47 cambio el nombre de ADIVINADO a SEGUIR-BUCLE
 : SEGUIR-BUCLE ( -- flag )
     \ Considerarlo adivinado si lo ha adivinado o se ha pasado del número de intentos
     \ v1.50 tener también en cuenta si se ha mostrado la solución
@@ -1524,13 +1387,9 @@ CREATE $COMANDOS-TEXT
 ;
 
 : ME-RINDO   ( -- ) RESUELVE ;
-\ v1.22 RES es como RESUELVE antes era R
 : RES   ( -- ) RESUELVE ;
 
-\ v1.20 defino todo esto después de HELP1 y HELP2 porque en PISTA se usa HELP1
-
 \ v1.19 mostrar textos según las posibilidades que tenga de adivinarlo.
-\ v1.106 cambio HUMOR-HINT por HUMOR-PISTA
 : HUMOR-PISTA   ( -- )
     \ Solo mostrar mensajes si es menor de 6
     N-POSIBLES 6 <
@@ -1561,7 +1420,6 @@ CREATE $COMANDOS-TEXT
 \ v1.3 Al mostrar los números, indicar si era mayor o menor
 \ v1.4 Usar MAYOR-MENOR para mostrar si era mayor o menor
 \ v1.17 simplificar el texto
-\ v1.54 cambio HINT por PISTA
 : PISTA   ( -- )
     \ v 1.20 si el número es ULTIMONUMERO es que ya lo ha adivinado
     ULTIMONUMERO @ NUMEROADIVINAR @ = 
@@ -1596,8 +1454,6 @@ CREATE $COMANDOS-TEXT
 \ Si se indica un valor asignar ese nivel.
 \ Si se asigna un nivel llamar a reiniciar.
 : NIVEL   ( n|-1| -- ) 
-    \ DEPTH 0= IF -1 ELSE DUP THEN
-    \ DEPTH 0= IF NO_NUM DUP ELSE DUP THEN
     DEPTH 0= IF NO_NUM THEN
     DUP
     \ Asignar el nivel si es 0 o mayor
@@ -1605,7 +1461,6 @@ CREATE $COMANDOS-TEXT
     IF
         ELNIVEL ! TRUE REINICIAR
     ELSE
-        \ s" en nivel si es menor de cero " DEBUG1
         NO_NUM <>
         IF CR ."     El numero indicado para la NIVEL no es valido." THEN
         VER-NIVELES
@@ -1632,10 +1487,6 @@ FALSE VALUE CAMBIARJUEGO?
 \ Si se indica TRUE mostrar los mensajes
 \ : REINICIAR   ( flag| -- limpia la pila )
 :NONAME
-    \ v1.264 no asignarla
-    \ Se asigna al cargar el fichero
-    \ v1.263 asignar una cadena vacía a quejugar
-    \ s" " QUEJUGAR!
     \ v1.252 asignar false a CAMBIARJUEGO?
     FALSE TO CAMBIARJUEGO?
     \ v1.208 asignar false al reiniciar
@@ -1663,7 +1514,6 @@ FALSE VALUE CAMBIARJUEGO?
     LIMPIAR-PILA
 ; IS REINICIAR
 
-\ v1.124 defino INICIAR como alias de REINICIAR
 : INICIAR   ( flag| -- ) REINICIAR ;
 
 \ ********************************************
@@ -1700,8 +1550,6 @@ FALSE VALUE CAMBIARJUEGO?
         ." ' (el ordenador adivinara el numero) ***"
     THEN
     CR CR
-    \ CR
-    \ ." *** JUGAR SOLO (el ordenador adivinara el numero) ***" CR CR
     ." Juego automaticamente, ire mostrando los numeros elegidos y si lo acierto. " CR
     ." Estoy jugando con el NIVEL: " ELNIVEL ? 
     ." tengo que adivinar un numero del 1 al " EL-MAXIMO STR ." ." CR
@@ -1860,7 +1708,6 @@ FALSE VALUE CAMBIARJUEGO?
         ." ' (con comandos limitados) ***"
     THEN
     CR CR
-    \ CR ." *** JUGAR en modo normal (con comandos limitados) ***" CR CR
     ." Los comandos que puedes utilizar son:" CR
     COMANDOS-MOSTRAR
     ." Escribe AYUDA para ver las ayudas disponibles." CR CR
@@ -1899,34 +1746,28 @@ FALSE VALUE CAMBIARJUEGO?
             THEN
             \ Este DUP hace falta para que después de salir del bucle se use en el CASE
             DUP
-            \ s" en jugar-bucle despues de jugar-cambiar " DEBUG1
             \ Asignar false si es -1, true en otro caso
             -1 = IF FALSE ELSE TRUE THEN TO CAMBIARJUEGO?
             \ Después de LEAVE da error de invalid memory address
             \ CAMBIARJUEGO? IF LEAVE THEN
         THEN
-        \ s" en jugar-bucle despues del then de cambiarjuego? " DEBUG1
         CAMBIARJUEGO?
         IF
             \ dejar true en la pila para salir y no usar LEAVE
             TRUE
         ELSE
-            \ s" en jugar-bucle antes de seguir-bucle " DEBUG1
             DEPTH 0> IF DROP THEN
             SEGUIR-BUCLE
         THEN
         \ If flag is false, go back to BEGIN. If flag is true, terminate the loop
     UNTIL
     \ Aquí llega después de finalizar el juego
-    \ s" en jugar-bucle despues de until " DEBUG1
     \ Comprobar si es que se ha indicado cambiar de juego
     CAMBIARJUEGO?
     IF
         \ quejugar no tiene nada asignado
-        \ s" en jugar-bucle cambiarjuego? es true 'quejugar= " 'QUEJUGAR DEBUG2
         \ asignar lo que se haya indicado en el índice
         DUP JUGAR>S QUEJUGAR!
-        \ s" en jugar-bucle cambiarjuego? es true 'quejugar= " 'QUEJUGAR DEBUG2
         \ asignar false para que no se cumpla este if
         \   salvo que se seleccione cambiar de tipo de juego
         FALSE TO CAMBIARJUEGO?
@@ -1934,7 +1775,6 @@ FALSE VALUE CAMBIARJUEGO?
         \ Llamar a jugar-quejugar con el tipo de juego elegido
         'QUEJUGAR JUGAR-QUEJUGAR
         \ Aquí llega después de jugar al nuevo juego y finalizar.
-        \ s" Antes de salir despues de cambiar de juego " DEBUG1
     ELSE
         CR
         \ Preguntar si quiere echar otra partida
@@ -2010,23 +1850,14 @@ FALSE VALUE CAMBIARJUEGO?
 \   Se puede llamar con 'QUEAYUDA AYUDA-RUN o 'QUELETRA AYUDA-RUN
 \ Solo se llama desde AYUDA?AYUDA
 : AYUDA-RUN   ( addr len -- index|-1 )
-    \ para mostrar lo que se busca
-    \ 2DUP 2>R
-    \ si se comenta esto, comentar lo anterior
-    \ s"   al entrar en ayuda-run " 2R> DEBUG2
-    
-    \ s"   al entrar en ayuda-run " DEBUG1
     AYUDA-INDEX
     DUP
     DUP \ hacer otra copia
-    \ s"   en ayuda-run despues del ayuda-index y DUP DUP " DEBUG1
     \ Si devuelve -1 es que no existe esa ayuda, buscar sin guión
     -1 = 
     IF
         DROP \ quitar el -1 de la pila
         DROP \ quitar la copia hecha después del ayuda-index anterior
-        
-        \ s"   en ayuda-run no existe la ayuda " DEBUG1
         
         \ Cambiar el guión por un espacio y buscar la ayuda
         QUENUMEROS-LETRAS-LIMPIAR
@@ -2062,15 +1893,11 @@ FALSE VALUE CAMBIARJUEGO?
             DUP \ para mostrar qué ayuda es 
             DUP \ porque después de ENDCASE quita el valor 
             CR ." *** La ayuda '" AYUDA>S TYPE ." ' existe, pero no esta contemplada ***" CR
-            \ s" en ayuda-run existe la ayuda, en el CASE " DEBUG1
         ENDCASE
-        \ s" en ayuda-run existe la ayuda, despues de ENDCASE " DEBUG1
     ELSE
         DROP \ v1.233
         -1
-        \ s" en ayuda-run no existe la ayuda, en el else " DEBUG1
     THEN
-    \ s"   al salir de ayuda-run " DEBUG1
 ;
 
 : DIFICULTAD-CASE   ( n -- n )
@@ -2085,9 +1912,7 @@ FALSE VALUE CAMBIARJUEGO?
         \   guardar en el return stack el valor de la pila,
         \       que será el índice del comando
         \   llamar a dificultad y reponer el valor 
-        \ s" en dificultad-case antes de DROP >R DIFICULTAD R> " DEBUG1
         DROP >R DIFICULTAD R>
-        \ s" en dificultad-case despues de DROP >R DIFICULTAD R> " DEBUG1
     ELSE
         CR DIFICULTAD-MOSTRAR CR
         \ Comprobar si es el mismo nivel, en ese caso, no hacer nada más
@@ -2097,7 +1922,6 @@ FALSE VALUE CAMBIARJUEGO?
             DROP
             \ Mostrar los niveles
             CR VER-NIVELES
-            \ s" en dificultad-case despues de indicar el mismo nivel " DEBUG1
         ELSE
             \ Comprobar si se ha indicado 0, sacará un número aleatorio
             QUENUMEROS>N 0=
@@ -2122,7 +1946,6 @@ FALSE VALUE CAMBIARJUEGO?
 ;
 
 : NIVEL-CASE   ( n -- n )
-    \ s" al entrar en nivel-case, quenumeros= " 'QUENUMEROS DEBUG2
     \ En la pila estará el valor del comando de NIVEL
     QUENUMEROS>N
     DUP
@@ -2163,17 +1986,14 @@ FALSE VALUE CAMBIARJUEGO?
 \ Se utiliza en jugar-bucle después de dime
 \ : JUGAR-CAMBIAR   ( -- n|-1 )
 :NONAME
-    \ s" al entrar en jugar-cambiar " DEBUG1
     CR ." Elige que forma de jugar quieres."
     JUGAR-MOSTRAR-OPCIONES
     \ Aquí no se ha modificado la pila
-    \ s" en jugar-cambiar despues de jugar-mostrar-opciones " DEBUG1
     ." Indica una de las opciones mostradas para cambiar el tipo de juego." CR
     s" Que forma de jugar quieres? "
     s" Si cambias de tipo de juego se finaliza el juego actual."
     PREGUNTA?
     \ Aquí ha quitado lo que había en la pila al entrar y ha puesto 0
-    \ s" en jugar-cambiar despues de pregunta? " DEBUG1
     
     \ Comprobar si lo escrito es la misma opción de juego
     'QUEAYUDA 'QUEJUGAR COMPARE 0=
@@ -2185,7 +2005,6 @@ FALSE VALUE CAMBIARJUEGO?
     \ Si es -1 es que no existe esa opción de juego
     \ Si es 8 (?) como si no se hubiera elegido una opción
     'QUEAYUDA JUGAR-INDEX
-    \ s" en jugar-cambiar, queayuda= " 'QUEAYUDA DEBUG2
     DUP
     8 = IF DROP -1 THEN
     DUP
@@ -2200,7 +2019,6 @@ FALSE VALUE CAMBIARJUEGO?
             ." La opcion de juego '" QUEAYUDA. ." ' no es valida."
         THEN
         CR
-        \ CR ." Esa opcion de juego no es valida." CR
     THEN
 ; IS JUGAR-CAMBIAR
 
@@ -2249,25 +2067,15 @@ FALSE VALUE CAMBIARJUEGO?
 : AYUDA?AYUDA   ( -- index|-1 )
     \ v1.233 por hacer: Dividir queayuda por un espacio
     \ v1.221 comprobar primero si QUEAYUDA tiene una ayuda
-    \ s" en ayuda?ayuda antes de 'QUEAYUDA AYUDA-RUN, QUEAYUDA: " 'QUEAYUDA DEBUG2
-    \ s" en ayuda?ayuda antes de 'QUEAYUDA AYUDA-RUN " DEBUG1
     'QUEAYUDA AYUDA-RUN
-    \ s" en ayuda?ayuda despues de 'QUEAYUDA AYUDA-RUN " DEBUG1
     DUP
     -1 > 
-    IF
-        \ s" en ayuda?ayuda ha encontrado la ayuda " DEBUG1
-        EXIT
-    ELSE
-        \ s" en ayuda?ayuda no se ha encontrado la ayuda " DEBUG1
-        DROP
-        \ s" en ayuda?ayuda no se ha encontrado la ayuda, despues de DROP " DEBUG1
+    IF EXIT
+    ELSE DROP
     THEN 
     
     \ Dividirlo poniendo la primera parte en números y la segunda en letras
     QUEAYUDA-SPLIT-NUMEROS-LETRAS
-    \ s"     en ayuda?ayuda QUENUMEROS= " 'QUENUMEROS DEBUG2
-    \ s"     en ayuda?ayuda QUELETRAS= " 'QUELETRAS DEBUG2
     \ comprobar si tiene un espacio y un guión
     \   eso es que está en formato ayuda ayuda-xxx
     32 QUEAYUDA?C
@@ -2280,40 +2088,29 @@ FALSE VALUE CAMBIARJUEGO?
         IF
             \ comprobar si la segunda palabra es una ayuda-xxx
             'QUELETRAS AYUDA-RUN
-            \ s"   en ayuda?ayuda tiene un espacio y guion, despues de 'QUELETRAS AYUDA-RUN " DEBUG1
         ELSE
             \ no tiene guión, pero está separada por espacio
             \ comprobar si la segunda palabra es una ayuda
             'QUELETRAS AYUDA-RUN
-            \ s"   en ayuda?ayuda tiene un espacio, pero no guion, despues de 'QUELETRAS AYUDA-RUN " DEBUG1
         THEN
     ELSE
         \ no tiene espacio
         \ comprobar si la segunda palabra es una ayuda
         'QUELETRAS AYUDA-RUN
-        \ s"   en ayuda?ayuda no tiene espacio, despues de 'QUELETRAS AYUDA-RUN " DEBUG1
     THEN
     \ si es -1 es que no se ha encontrado
     \ comprobar si se ha escrito como ayuda ayuda xxx
     DUP
     -1 =
     IF 
-        \ s"   en ayuda?ayuda antes de comprobar si la segunda palabra es una ayuda " 'QUEAYUDA DEBUG2
         DROP
         QUEAYUDA-SPLIT-NUMEROS-LETRAS
-        \ s"   en ayuda?ayuda despues de QUEAYUDA-SPLIT-NUMEROS-LETRAS, QUELETRAS= " 'QUELETRAS DEBUG2
         QUELETRAS-SPLIT
-        \ s"   en ayuda?ayuda despues de QUELETRAS-SPLIT, QUELETRAS= " 'QUELETRAS DEBUG2
         \ comprobar si tiene algo
-        \ QUELETRAS-LEN 0= IF s" *** QUELETRAS ESTA EN BLANCO *** " DEBUG1 -1 EXIT THEN
         QUELETRAS-LEN 0= IF -1 EXIT THEN
         
         'QUELETRAS AYUDA-RUN
-        \ s"   en ayuda?ayuda comprobando si la segunda palabra es una ayuda " 'QUELETRAS DEBUG2
     THEN
-    \ s"   en ayuda?ayuda comprobar si se ha encontrado " DEBUG1
-    
-    \ s"   al salir de ayuda?ayuda, QUELETRAS= " 'QUELETRAS DEBUG2
 ; \ IS AYUDA?AYUDA
 
 \ Si no es una ayuda, mostrar la ayuda general que corresponda
@@ -2336,7 +2133,6 @@ FALSE VALUE CAMBIARJUEGO?
             IF
                 ." La ayuda indicada: '" QUEAYUDA. ." ' no es una ayuda." CR
             ELSE
-                \ ." El comando o la ayuda indicada: '" QUEAYUDA. ." ' no es valido."
                 ." '" QUEAYUDA. ." ' no es un comando o una ayuda."
             THEN
         THEN
@@ -2353,8 +2149,6 @@ FALSE VALUE CAMBIARJUEGO?
 \ Solo se llama desde DIME
 \ v1.213 quito el parámetro
 : AYUDA-SEE   ( -- )
-    \ s" al entrar en ayuda-see " DEBUG1
-    
     QUEAYUDA>MAYUSCULAS
     \ Limpiar el contenido de los números y letras, 06-ene-2023 02.02
     QUENUMEROS-LETRAS-LIMPIAR
@@ -2378,17 +2172,13 @@ FALSE VALUE CAMBIARJUEGO?
     \ Si empieza por número
     IF 
         \ v1.214 DROP \ v1.213
-        \ s" en ayuda-see empieza por numero, QUELETRAS= " 'QUELETRAS DEBUG2
         'QUELETRAS COMANDO-RUN
-        \ s" en ayuda-see despues de 'QUELETRAS comando-run " DEBUG1
     
     \ Si no empieza por número
     ELSE 
         \ v1.214 DROP \ v1.213
-        \ s" en ayuda-see no empieza por numero " 'QUEAYUDA DEBUG2
         \ comprobar si es un comando
         'QUEAYUDA COMANDO-RUN
-        \ s" en ayuda-see despues de 'QUEAYUDA comando-run, QUEAYUDA= " 'QUEAYUDA DEBUG2
         DUP
         \ Si devuelve -1 es que no se ha encontrado,
         \ comprobar si se ha indicado ayuda-xxx
@@ -2396,14 +2186,11 @@ FALSE VALUE CAMBIARJUEGO?
         -1 = 
         IF
             DROP
-            \ s" en ayuda-see antes de ayuda?ayuda " DEBUG1
             \ buscar las posibilidades de que ponga ayuda
             AYUDA?AYUDA
-            \ s" en ayuda-see despues de ayuda?ayuda " DEBUG1
          THEN
     THEN
     \ v1.223 ya no hay que hacer más comprobaciones
-    \ s" en ayuda-see antes del ultimo IF " DEBUG1
     \ v1.266 hacer una copia para dejarla si no es -1
     DUP
     \ v1.225 si es -1 es que no está esa palabra, mostrar la ayuda general
@@ -2411,7 +2198,6 @@ FALSE VALUE CAMBIARJUEGO?
     IF
         \ v1.266 quitar la copia porque era -1
         DROP
-        \ s" en ayuda-see NO existe la ayuda o el comando: " 'QUEAYUDA DEBUG2
         FALSE AYUDA-GENERAL?
     THEN
 ;
@@ -2460,12 +2246,10 @@ FALSE VALUE CAMBIARJUEGO?
         THEN
         DEPTH 0> IF  CR ." En DIME queda algo en la pila cuando es un numero " .s CR THEN
     ELSE
-        \ s" en dime no es un numero, se llama a ayuda-see " 'QUEAYUDA DEBUG2
         AYUDA-SEE
     THEN
     \ Aquí no hay nada en el stack,
     \ v1.266 ahora estará la opción indicada si es un comando
-    \ s" al salir de dime " DEBUG1
 ; IS DIME
 
 \ : AYUDA   ( -- )
