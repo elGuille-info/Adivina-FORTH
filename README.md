@@ -9,7 +9,9 @@ Tiene definiciones de palabras que te pueden ser de utilidad general, aparte de 
 
 <br>
 
-En el directorio **adivina-versiones** están las versiones que he ido haciendo del juego.
+En el directorio **adivina-versiones** están las versiones que he ido haciendo del juego. 
+<br>
+Aquí tienes [el historial de revisiones](adivina-versiones/adivina-versiones.txt).
 
 <br>
 
