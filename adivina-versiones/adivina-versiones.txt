@@ -1,6 +1,24 @@
 Los cambios en el programa
 ===========================
 
+\ v1.273 (17-ene-2023 17.22)
+\   Cambio donde se usan estas palabras para indicar dónde guardar la respuesta.
+\   Defino CONTINUAR?, PREGUNTA-CHAR? y PREGUNTA? de forma genérica, 
+\       indicando la dirección donde se almacenará la respuesta.
+\       IMPORTANTE: LA RESPUESTA NO SE CONVIERTE EN MAYÚSCULAS.
+
+\ v1.272 (17-ene-2023 11.44)
+\   Defino '! para asignar una cadena a otra (una variable).
+\   Defino '-TRAILING y >' indicando una dirección de memoria y el máximo de caracteres 
+\       obtener esa dirección de memoria con los caracteres actuales.
+\   Defino >LIMPIAR para rellenar de espacios (BLANK) la dirección y longitud indicada.
+\   Defino >MAYUSCULAS para convertir en mayúsculas el contenido de la dirección y longitud indicada.
+
+\ v1.271 (16-ene-2023 21.50)
+\   Quito comentarios de cambio de nombres de las palabras y variables, etc.
+\   Quito definiciones y código que no se usan.
+\   Para ver lo que he quitado, comparar con la versión anterior ;-)
+
 \ v1.270 (16-ene-2023 20.52)
 \   En jugar-facil, jugar-dificil y jugar-auto le pongo el tipo de juego a quejugar.
 
