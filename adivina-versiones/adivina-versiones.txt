@@ -1,6 +1,10 @@
 Los cambios en el programa
 ===========================
 
+\ v1.274 (17-ene-2023 17.46)
+\   Uso el fichero util.forth con la definición de las palabras de uso general a usar.
+\   Debug1 y debu2 las pongo en util.forth.
+
 \ v1.273 (17-ene-2023 17.22)
 \   Cambio donde se usan estas palabras para indicar dónde guardar la respuesta.
 \   Defino CONTINUAR?, PREGUNTA-CHAR? y PREGUNTA? de forma genérica, 
