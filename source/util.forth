@@ -295,7 +295,7 @@ VARIABLE ESDEBUG? TRUE ESDEBUG? !
 \ Hacer una pregunta y asignar la respuesta en la segunda cadena
 \ Los parámetros son:
 \   addr1 len1 La pregunta a mostrar
-\   addr2 len2 Donde se guardará la respuesta sin cambiar mayúsculas y minúsculas
+\   addr2 len2 Donde se guardará la respuesta sin convertir a mayúsculas
 \   En len2 es conveniente poner la longitud máxima que se aceptará
 : PREGUNTA?   ( addr1 len1 addr2 len2 -- )
     \ Hacer copia de dónde se guardará la respuesta
@@ -317,19 +317,11 @@ VARIABLE ESDEBUG? TRUE ESDEBUG? !
 \   En len3 es conveniente poner la longitud máxima que se aceptará
 \ CHAR S s" La pregunta? " s" texto antes de la pregunta" RESPUESTA MAX_RESP
 : PREGUNTA-CHAR?   ( char addr1 len1 addr2 len2 addr3 max3 -- flag )
-    \ s" al entrar en pregunta-char? " DEBUG1 cr
-    \ 2DUP 2DUP 2>R 2>R >R DROP
     2DUP 2>R >R DROP
     TYPE CR TYPE
     TIB R> ACCEPT #TIB ! 0 >IN !
-    \ 1 TEXT PAD 2R> MOVE
     1 TEXT PAD 2R@ MOVE
-    \ 2R> 2DUP 2>R 2>R s" el contenido de addr3 len3= " 2R> '-TRAILING DEBUG2
-    \ Convertir en mayúsculas
-    \ 2R> 2DUP >MAYUSCULAS
     \ Si es la letra indicada en mayúsculas, pondrá TRUE en la pila, si no pondrá FALSE
-    \ DROP C@ = 
-    \ DROP DUP >R C@ toupper R@ C! R> C@ = 
     2R> DROP C@ toupper = 
 ;
 
