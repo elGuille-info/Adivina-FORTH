@@ -9,6 +9,10 @@ Tiene definiciones de palabras que te pueden ser de utilidad general, aparte de 
 
 <br>
 
+El directorio **source** tiene el código principal y otro con las utilidades de forma separada y un fichero para probar las utilidades.
+
+<br>
+
 En el directorio **adivina-versiones** están las versiones que he ido haciendo del juego. 
 <br>
 Aquí tienes [el historial de revisiones](adivina-versiones/adivina-versiones.txt).
@@ -16,4 +20,4 @@ Aquí tienes [el historial de revisiones](adivina-versiones/adivina-versiones.tx
 <br>
 
 Iniciado el 25-dic-2022<br>
-Última actualización v1.271 del 16-ene-2023
+Última actualización v1.273 del 17-ene-2023
