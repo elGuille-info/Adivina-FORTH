@@ -1,6 +1,15 @@
 # Adivina Forth
 Juego de adivinar un número (escrito en lenguaje Forth)
 
+## ESTE REPOSITORIO LO VOY A ELIMINAR
+
+Por favor usa este otro:
+> [Adivina Forth en Forth Programming Language](https://github.com/elGuille-info/Forth-programming-language/tree/main/juegos/adivina-forth)
+
+<br>
+
+### OBSOLETO
+
 <br>
 
 El código está probado en gForth y SwiftForth (evaluación)
